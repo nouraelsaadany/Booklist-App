@@ -5,6 +5,7 @@ const addButton = document.getElementById("addButtonID");
 const search = document.getElementById("searchId");
 const deleteButton = document.createElement("button");
 const tbody = document.querySelector("tbody");
+const clearAllButton = document.getElementById("clearAll");
 
 class BookList {
   constructor(bookListArray) {
@@ -61,6 +62,15 @@ class BookList {
     });
   };
 
+  clearList = e => {
+    let clicked = confirm("Are You Sure You want to delete all tasks ?");
+
+    while (tr.firstChild) {
+      tr.removeChild(tr.firstChild)
+    }
+
+  }
+
   addingNameToArray = () => {
     if (
       bookNameInput.value !== "" &&
@@ -81,31 +91,44 @@ class BookList {
     }
   };
 
+  //adding to list 
+
   addButtonListen = (button, child, text) =>
-    button.addEventListener("click", function() {
+    button.addEventListener("click", function () {
       let list = this.bookListArray;
       console.log("text", text);
       let clicked = confirm("Are You Sure You want to delete this task ?");
-      alert(clicked);
+      //alert(clicked);
       if (clicked == true) {
         tbody.removeChild(child);
         const index = list.indexOf(text);
         list.splice(index, 1);
       }
     });
+  //clear all
 
-  //filter
+
+
+  // local storage
+
+
 }
 
 const bookList = new BookList();
 
-addButton.addEventListener("submit", function(e) {
+addButton.addEventListener("submit", function (e) {
   e.preventDefault();
   alert("it is working");
   console.log(e);
   bookList.addingNameToArray();
 });
 
-search.addEventListener("keyup", function(e) {
+search.addEventListener("keyup", function (e) {
   bookList.filterList(e);
 });
+
+clearAllButton.addEventListener("click", function (e) {
+  e.preventDefault();
+  alert("clear ");
+  bookList.clearList(e);
+})
