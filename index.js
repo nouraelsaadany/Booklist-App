@@ -6,7 +6,7 @@ const search = document.getElementById("searchId");
 const deleteButton = document.createElement("button");
 const tbody = document.querySelector("tbody");
 const clearAllButton = document.getElementById("clearAll");
-
+const checkBox = document.getElementById("materialUnchecked");
 class BookList {
   constructor(bookListArray) {
     this.bookListArray = [];
@@ -72,6 +72,46 @@ class BookList {
     }
 
   }
+  sortList = () => {
+    console.log("hena")
+
+    if (checkBox.checked) {
+      this.bookListArray.sort(function (a, b) {
+        if (a > b) {
+          return 1;
+        } else {
+          return -1;
+        }
+      })
+      alert("checkkk")
+    }
+  }
+
+
+  bubbleSort = () => {
+    var swapped;
+    do {
+      swapped = false;
+      for (var i = 0; i < this.bookListArray.length - 1; i++) {
+        if (check(this.bookList[i], this.booklist[i + 1]) == 1) {
+          var temp = this.bookListArray[i];
+          this.bookListArray[i] = this.bookListArray[i + 1];
+          this.bookListArray[i + 1] = temp;
+          swapped = true;
+        }
+      }
+    } while (swapped);
+    for (var i = 0; i < this.bookListArray.length; i++) {
+      this.trMaker(this.bookListArray[i].bookname, this.bookListArray[i].authorname, this.bookListArray[i].isbn)
+
+    }
+    localStorage.setItem("BooksList", JSON.stringify(this.bookListArray));
+    return this.bookListArray;
+
+  }
+
+
+
 
   addingNameToArray = () => {
     if (
@@ -129,7 +169,13 @@ class BookList {
     this.bookListArray = temp !== null ? temp : [];
     this.bookListArray.forEach(element => {
       const book = new BookList();
-      book.trMaker(element);
+      console.log(element)
+      const {
+        bookname,
+        authorname,
+        isbn
+      } = element;
+      book.trMaker(bookname, authorname, isbn);
     });
   };
 
@@ -154,3 +200,19 @@ clearAllButton.addEventListener("click", function (e) {
   alert("clear ");
   bookList.clearList(e);
 })
+checkBox.addEventListener("change", function (e) {
+  e.preventDefault();
+  bookList.bubbleSort();
+
+  console.log(bookList.bubbleSort());
+
+})
+
+const x = {
+  name: "hazem",
+  age: 10
+}
+const y = {
+  name: "nour",
+  age: 11
+}
