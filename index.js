@@ -65,10 +65,10 @@ class BookList {
 
   clearList = () => {
     let clicked = confirm("Are You Sure You want to delete all tasks ?");
+    localStorage.clear();
+    while (tbody.firstChild) {
+      tbody.removeChild(tbody.firstChild)
 
-    while (tr.firstChild) {
-      tr.removeChild(tr.firstChild)
-      localStorage.clear();
     }
 
   }
@@ -115,7 +115,7 @@ class BookList {
         tbody.removeChild(child);
         const index = list.indexOf(text);
         list.splice(index, 1);
-        localStorage.setItem("BooksList", JSON.stringify(this.bookListArray))
+        localStorage.setItem("BooksList", JSON.stringify(list))
       }
     });
   //clear all
