@@ -59,14 +59,16 @@ class BookList {
         search.style.display = "none";
         //  console.log("sss", ul.childNodes[i]);
       }
+      localStorage.setItem("BooksList", JSON.stringify(this.bookListArray));
     });
   };
 
-  clearList = e => {
+  clearList = () => {
     let clicked = confirm("Are You Sure You want to delete all tasks ?");
 
     while (tr.firstChild) {
       tr.removeChild(tr.firstChild)
+      localStorage.clear();
     }
 
   }
@@ -77,7 +79,12 @@ class BookList {
       authorNameInput.value !== "" &&
       isbnInput.value !== ""
     ) {
-      this.bookListArray.push(bookNameInput, authorNameInput, isbnInput);
+      const book = {
+        bookname: bookNameInput.value,
+        isbn: isbnInput.value,
+        authorname: authorNameInput.value
+      }
+      this.bookListArray.push(book);
       const bookList = new BookList();
       bookList.trMaker(
         bookNameInput.value,
@@ -87,22 +94,28 @@ class BookList {
       bookNameInput.value = "";
       authorNameInput.value = "";
       isbnInput.value = "";
-      console.log(this.bookListArray);
+      localStorage.setItem("BooksList", JSON.stringify(this.bookListArray))
+
+      console.log(localStorage.getItem("BooksList"));
     }
+
   };
 
   //adding to list 
 
   addButtonListen = (button, child, text) =>
-    button.addEventListener("click", function () {
-      let list = this.bookListArray;
+    button.addEventListener("click", () => {
+      let list = JSON.parse(localStorage.getItem("BooksList"));
+
       console.log("text", text);
       let clicked = confirm("Are You Sure You want to delete this task ?");
+      console.log(this.bookListArray)
       //alert(clicked);
       if (clicked == true) {
         tbody.removeChild(child);
         const index = list.indexOf(text);
         list.splice(index, 1);
+        localStorage.setItem("BooksList", JSON.stringify(this.bookListArray))
       }
     });
   //clear all
@@ -110,11 +123,20 @@ class BookList {
 
 
   // local storage
-
+  loadFromLocalStorage = () => {
+    const temp = JSON.parse(localStorage.getItem("BooksList"));
+    console.log("temp " + temp);
+    this.bookListArray = temp !== null ? temp : [];
+    this.bookListArray.forEach(element => {
+      const book = new BookList();
+      book.trMaker(element);
+    });
+  };
 
 }
 
 const bookList = new BookList();
+bookList.loadFromLocalStorage();
 
 addButton.addEventListener("submit", function (e) {
   e.preventDefault();
